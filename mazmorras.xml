@@ -1,0 +1,15 @@
+<dungeon>
+    <room id="R0">
+        <door name="Norte" dest="R1"/>
+        <door name="Sur" dest="R2"/>
+        <description>Inicio</description>
+    </room>
+    <room id="R1">
+        <door name="Sur" dest="R0"/>
+        <description>Habitación vacía</description>
+    </room>
+    <room id="R2">
+        <door name="Norte" dest="R0"/>
+        <description>Habitación pequeña</description>
+    </room>
+</dungeon>
