@@ -3,7 +3,6 @@ package main;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
-
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
@@ -23,20 +22,27 @@ public class MainClass {
 
     public static void main(String[] args) {
 
-        JLabel actualRoomDescription = new JLabel("Mazmorra");
+        JLabel actualRoomDescription = new JLabel("Carga una mazmorra");
         actualRoomDescription.setFont(new Font("Arial", Font.BOLD, 20));
         actualRoomDescription.setHorizontalAlignment(SwingConstants.CENTER);
         actualRoomDescription.setVerticalAlignment(SwingConstants.CENTER);
 
         JButton up = new JButton("Up");
+        up.setEnabled(false);
         JButton down = new JButton("Down");
+        down.setEnabled(false);
         JButton left = new JButton("Left");
+        left.setEnabled(false);
         JButton right = new JButton("Right");
+        right.setEnabled(false);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
 
         JLabel movementLogger = new JLabel("<html><body>Log");
-        movementLogger.setFont(new Font("Arial", Font.BOLD, 20));
+        movementLogger.setFont(new Font("Arial", Font.BOLD, 15));
+        movementLogger.setVerticalAlignment(SwingConstants.NORTH);
+
+        JScrollPane scrollPaneLog = new JScrollPane(movementLogger);
 
         JPanel navigationPanel = new JPanel(new BorderLayout());
         navigationPanel.add(up , BorderLayout.NORTH);
@@ -65,17 +71,19 @@ public class MainClass {
         tree.setRootVisible(true);
         tree.setShowsRootHandles(true);
         tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("Mazmorra")));
-        mainPanel.add(tree, BorderLayout.WEST);
 
         JSplitPane splitPaneVertical = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         splitPaneVertical.setTopComponent(navigationPanel);
-        splitPaneVertical.setBottomComponent(movementLogger);
+        splitPaneVertical.setBottomComponent(scrollPaneLog);
+        splitPaneVertical.setDividerLocation(100);
 
         JSplitPane splitPaneHorizontal =  new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         splitPaneHorizontal.setLeftComponent(tree);
         splitPaneHorizontal.setRightComponent(splitPaneVertical);
+        splitPaneHorizontal.setDividerLocation(200);
 
         mainPanel.add(splitPaneHorizontal, BorderLayout.CENTER);
+        mainPanel.updateUI();
 
         menuItemSalir.addActionListener(e -> System.exit(0));
         menuItemLoad.addActionListener(e -> {
@@ -101,6 +109,7 @@ public class MainClass {
                 actualRoomDescription.setText(mazmorra.getRooms().get(0).getDescription());
                 loadTree(tree, mazmorra);
                 loadRoom(mazmorra.getRooms().get(0), actualRoomDescription, movementLogger, up, down, left, right);
+                mainPanel.updateUI();
             } catch (JAXBException exception) {
                 exception.printStackTrace();
             }
